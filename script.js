@@ -247,4 +247,47 @@ document.addEventListener('DOMContentLoaded', () => {
       // Navegadores que bloquean autoplay antes de gesto de usuario
     }
   }
+
+  // --- BLOQUEO TOTAL DE ZOOM ---
+  // Bloquear gestos de pellizco en Safari iOS
+  document.addEventListener('gesturestart', (e) => e.preventDefault());
+  document.addEventListener('gesturechange', (e) => e.preventDefault());
+  document.addEventListener('gestureend', (e) => e.preventDefault());
+
+  // Bloquear multi-touch pinch en pantallas táctiles
+  document.addEventListener('touchstart', (e) => {
+    if (e.touches && e.touches.length > 1) {
+      e.preventDefault();
+    }
+  }, { passive: false });
+
+  document.addEventListener('touchmove', (e) => {
+    if (e.touches && e.touches.length > 1) {
+      e.preventDefault();
+    }
+  }, { passive: false });
+
+  // Bloquear zoom por doble toque rápido
+  let lastTouchEnd = 0;
+  document.addEventListener('touchend', (e) => {
+    const now = Date.now();
+    if (now - lastTouchEnd <= 300) {
+      e.preventDefault();
+    }
+    lastTouchEnd = now;
+  }, { passive: false });
+
+  // Bloquear zoom con rueda de ratón (Ctrl + scroll)
+  document.addEventListener('wheel', (e) => {
+    if (e.ctrlKey) {
+      e.preventDefault();
+    }
+  }, { passive: false });
+
+  // Bloquear atajos de zoom de teclado (Ctrl +, Ctrl -, Ctrl 0)
+  document.addEventListener('keydown', (e) => {
+    if (e.ctrlKey && (e.key === '+' || e.key === '-' || e.key === '=' || e.key === '0')) {
+      e.preventDefault();
+    }
+  });
 });

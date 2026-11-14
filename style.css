@@ -33,21 +33,31 @@ html,
 body {
   width: 100%;
   height: 100%;
-  overflow-x: hidden;
+  height: 100dvh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
   background-color: var(--bg-dark);
   color: var(--text-primary);
   font-family: var(--font-ui);
   user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+  -ms-touch-action: none;
+  overscroll-behavior: none;
+  -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
 }
 
 body {
-  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh;
   display: flex;
   justify-content: center;
   align-items: center;
   background: radial-gradient(circle at 50% 18%, #161a40 0%, #0a0d24 50%, #03040c 100%);
   position: relative;
+  overflow: hidden;
 }
 
 /* =========================================================
@@ -167,8 +177,11 @@ body {
   justify-content: center;
   width: 100%;
   max-width: 820px;
-  padding: 2.5rem 1.5rem;
+  height: 100%;
+  max-height: 100dvh;
+  padding: 1.5rem;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 /* =========================================================
@@ -176,9 +189,9 @@ body {
    ========================================================= */
 .moon-wrapper {
   position: relative;
-  width: 180px;
-  height: 180px;
-  margin-bottom: 2rem;
+  width: min(180px, 20vh);
+  height: min(180px, 20vh);
+  margin-bottom: clamp(1rem, 2.5vh, 2rem);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -186,6 +199,7 @@ body {
   transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
   animation: floatMoon 7s ease-in-out infinite;
   outline: none;
+  flex-shrink: 0;
 }
 
 .moon-wrapper:hover {
@@ -199,8 +213,8 @@ body {
 /* Halos luminosos de la luna */
 .moon-halo-outer {
   position: absolute;
-  width: 320px;
-  height: 320px;
+  width: min(320px, 36vh);
+  height: min(320px, 36vh);
   border-radius: 50%;
   background: radial-gradient(circle, var(--moon-glow-outer) 0%, rgba(135, 175, 255, 0.08) 50%, transparent 75%);
   filter: blur(15px);
@@ -210,8 +224,8 @@ body {
 
 .moon-halo-inner {
   position: absolute;
-  width: 230px;
-  height: 230px;
+  width: min(230px, 26vh);
+  height: min(230px, 26vh);
   border-radius: 50%;
   background: radial-gradient(circle, var(--moon-glow-intense) 0%, rgba(255, 240, 200, 0.2) 60%, transparent 75%);
   filter: blur(8px);
@@ -221,8 +235,8 @@ body {
 /* Cuerpo esférico de la Luna */
 .moon {
   position: relative;
-  width: 155px;
-  height: 155px;
+  width: min(155px, 17vh);
+  height: min(155px, 17vh);
   border-radius: 50%;
   background: radial-gradient(circle at 35% 35%, #ffffff 0%, #fff6df 45%, #ecdcb0 85%, #bca574 100%);
   box-shadow:
@@ -427,7 +441,7 @@ body {
 
 .main-title {
   font-family: var(--font-title);
-  font-size: 2.8rem;
+  font-size: clamp(1.8rem, 4.5vw, 2.7rem);
   font-weight: 700;
   letter-spacing: 2px;
   margin: 0.2rem 0;
@@ -488,15 +502,13 @@ body {
 
 .quote-text {
   font-family: var(--font-quote);
-  font-size: 1.45rem;
+  font-size: clamp(1.2rem, 3.2vw, 1.55rem);
   font-style: italic;
   font-weight: 400;
-  line-height: 1.8;
+  line-height: 1.7;
   color: #f7f9ff;
   letter-spacing: 0.3px;
   text-shadow: 0 2px 14px rgba(0, 0, 0, 0.95), 0 0 25px rgba(5, 7, 24, 0.85);
-  transition: opacity 0.5s ease, transform 0.5s ease;
-  min-height: 110px;
   display: flex;
   align-items: center;
   justify-content: center;
