@@ -293,4 +293,8 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
     }
   });
+
+  // Prevenir menú contextual y seleccionador azul al mantener presionado
+  document.addEventListener('contextmenu', (e) => e.preventDefault());
+  document.addEventListener('selectstart', (e) => e.preventDefault());
 });
