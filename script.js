@@ -254,18 +254,21 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('gesturechange', (e) => e.preventDefault());
   document.addEventListener('gestureend', (e) => e.preventDefault());
 
-  // Bloquear multi-touch pinch en pantallas táctiles
+  // Bloquear multi-touch pinch y arrastre/deslizamiento hacia abajo en móviles
   document.addEventListener('touchstart', (e) => {
     if (e.touches && e.touches.length > 1) {
       e.preventDefault();
     }
   }, { passive: false });
 
+  // Bloquear completamente el deslizamiento/scroll táctil (pull down / rubber-band)
   document.addEventListener('touchmove', (e) => {
-    if (e.touches && e.touches.length > 1) {
-      e.preventDefault();
-    }
+    e.preventDefault();
   }, { passive: false });
+
+  window.addEventListener('scroll', () => {
+    window.scrollTo(0, 0);
+  });
 
   // Bloquear zoom por doble toque rápido
   let lastTouchEnd = 0;
