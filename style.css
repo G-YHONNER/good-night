@@ -487,29 +487,22 @@ body {
 /* Cuerpo de la cita */
 .card-body {
   position: relative;
-  padding: 0.5rem 1rem 1.8rem;
+  padding: 0.5rem 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .quote-mark {
   font-family: var(--font-quote);
-  font-size: 3.2rem;
-  color: rgba(255, 235, 170, 0.25);
-  line-height: 0;
-  vertical-align: middle;
-  pointer-events: none;
-}
-
-.open-quote {
-  position: absolute;
-  top: 10px;
-  left: -8px;
-}
-
-.close-quote {
+  font-size: 1.35em;
+  color: var(--gold-accent);
+  opacity: 0.85;
+  line-height: 1;
+  vertical-align: -0.05em;
+  margin: 0 0.15rem;
   display: inline-block;
-  position: relative;
-  top: 15px;
-  margin-left: 4px;
+  pointer-events: none;
 }
 
 .quote-text {
@@ -517,13 +510,12 @@ body {
   font-size: clamp(1.2rem, 3.2vw, 1.55rem);
   font-style: italic;
   font-weight: 400;
-  line-height: 1.7;
+  line-height: 1.6;
   color: #f7f9ff;
   letter-spacing: 0.3px;
   text-shadow: 0 2px 14px rgba(0, 0, 0, 0.95), 0 0 25px rgba(5, 7, 24, 0.85);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  text-align: center;
+  margin: 0 auto;
 }
 
 .author-tag {
@@ -705,13 +697,8 @@ body {
   }
 
   .quote-text {
-    font-size: 1.2rem;
-    min-height: 120px;
-    line-height: 1.65;
-  }
-
-  .quote-mark {
-    font-size: 2.4rem;
+    font-size: clamp(1.15rem, 4vw, 1.35rem);
+    line-height: 1.6;
   }
 
   .card-actions {
