@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buenas Noches ✨ Dulces Sueños</title>
+  <meta name="description"
+    content="Una hermosa tarjeta interactiva de Buenas Noches con una luna brillante, cielo estrellado y frases reconfortantes para descansar.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Dancing+Script:wght@600;700&family=Outfit:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,500;0,700;1,400&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <!-- Canvas de fondo para estrellas dinámicas y estrellas fugaces -->
+  <canvas id="stars-canvas"></canvas>
+
+  <!-- Efecto de nebulosa cósmica -->
+  <div class="nebula nebula-1"></div>
+  <div class="nebula nebula-2"></div>
+
+  <!-- Nubes místicas nocturnas -->
+  <div class="cloud cloud-1"></div>
+  <div class="cloud cloud-2"></div>
+  <div class="cloud cloud-3"></div>
+
+  <main class="night-scene" id="night-scene">
+
+    <!-- Sección de la Luna con cráteres y resplandor interactivo -->
+    <div class="moon-wrapper" id="moon-wrapper" role="button" tabindex="0"
+      title="¡Haz clic en la luna para activar destellos mágicos!">
+      <div class="moon-halo-outer"></div>
+      <div class="moon-halo-inner"></div>
+
+      <!-- Cuerpo esférico de la Luna -->
+      <div class="moon" id="moon-element">
+        <div class="crater crater-1"></div>
+        <div class="crater crater-2"></div>
+        <div class="crater crater-3"></div>
+        <div class="crater crater-4"></div>
+        <div class="crater crater-5"></div>
+        <div class="crater crater-6"></div>
+        <div class="moon-glow-surface"></div>
+        <div class="moon-shadow-crescent" id="moon-shadow"></div>
+      </div>
+
+      <!-- Estrellas titilantes junto a la luna -->
+      <div class="companion-star">✦</div>
+      <div class="companion-star star-small">✧</div>
+    </div>
+
+    <!-- Contenedor de la Tarjeta de Buenas Noches (Glassmorphism) -->
+    <section class="card-container" id="quote-card">
+      <div class="card-glass-glow"></div>
+
+      <header class="card-header">
+        <span class="sub-greeting">✦ Momento de descansar ✦</span>
+        <h1 class="main-title">Buenas Noches</h1>
+        <div class="divider">
+          <span class="divider-line"></span>
+          <span class="divider-icon">🌙</span>
+          <span class="divider-line"></span>
+        </div>
+      </header>
+
+      <div class="card-body">
+        <span class="quote-mark open-quote">“</span>
+        <p class="quote-text" id="quote-text">
+          Que la luna vele tus sueños y las estrellas enciendan la esperanza de un nuevo amanecer. Suelta las cargas del
+          día, respira en calma y descansa con el corazón en paz.
+        </p>
+        <span class="quote-mark close-quote">”</span>
+
+        <p class="author-tag" id="author-tag">— Dulces Sueños & Serenidad —</p>
+      </div>
+
+      <footer class="card-actions">
+        <button id="btn-next-quote" class="glow-button secondary" aria-label="Cambiar a otra hermosa frase">
+          <span class="btn-icon">✨</span> Otra Frase
+        </button>
+        <button id="btn-make-wish" class="glow-button primary" aria-label="Pedir un deseo a una estrella fugaz">
+          <span class="btn-icon">🌠</span> Pedir Deseo
+        </button>
+        <button id="btn-copy-quote" class="glow-button secondary" aria-label="Copiar frase al portapapeles">
+          <span class="btn-icon">📋</span> Copiar
+        </button>
+        <button id="btn-sound-toggle" class="glow-button ambient"
+          aria-label="Activar música o sonidos relajantes de noche" title="Sonido celestial ambiental">
+          <span class="btn-icon" id="sound-icon">🔈</span> <span id="sound-label">Música Zen</span>
+        </button>
+      </footer>
+    </section>
+
+    <!-- Notificación emergente para deseos o copia -->
+    <div class="wish-toast" id="wish-toast">
+      🌟 ¡Tu deseo ha sido enviado al universo! Duerme en paz.
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
