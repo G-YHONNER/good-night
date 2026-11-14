@@ -1,58 +1,14 @@
 /* =========================================================
    SCRIPT - BUENAS NOCHES Y LUNA MÁGICA
-   Estrellas dinámicas en Canvas, Frases poéticas,
-   Estrellas fugaces interactivas, Copiar Frase y Sonido Zen (Web Audio API)
+   Estrellas dinámicas en Canvas, Estrellas fugaces interactivas,
+   efectos luminosos en la luna y el cielo nocturno.
    ========================================================= */
 
 document.addEventListener('DOMContentLoaded', () => {
   // --- ELEMENTOS DEL DOM ---
   const canvas = document.getElementById('stars-canvas');
   const ctx = canvas.getContext('2d');
-  const quoteText = document.getElementById('quote-text');
-  const authorTag = document.getElementById('author-tag');
-  const btnNextQuote = document.getElementById('btn-next-quote');
-  const btnMakeWish = document.getElementById('btn-make-wish');
-  const btnCopyQuote = document.getElementById('btn-copy-quote');
-  const btnSoundToggle = document.getElementById('btn-sound-toggle');
-  const soundIcon = document.getElementById('sound-icon');
-  const soundLabel = document.getElementById('sound-label');
-  const wishToast = document.getElementById('wish-toast');
   const moonWrapper = document.getElementById('moon-wrapper');
-  const moonElement = document.getElementById('moon-element');
-
-  // --- COLECCIÓN DE FRASES DE BUENAS NOCHES ---
-  const quotes = [
-    {
-      text: "Que la luna vele tus sueños y las estrellas enciendan la esperanza de un nuevo amanecer. Suelta las cargas del día, respira en calma y descansa con el corazón en paz.",
-      author: "— Dulces Sueños & Serenidad —"
-    },
-    {
-      text: "Apaga los pensamientos del día, enciende la calma en tu alma. Deja que el silencio de la noche te devuelva la armonía y la dulzura que mereces.",
-      author: "— Que la Paz te Acompañe —"
-    },
-    {
-      text: "El día ha concluido y diste lo mejor de ti. Ahora suelta todo control, abraza la quietud de la noche y prepárate para soñar cosas hermosas.",
-      author: "— Descanso Reparador —"
-    },
-    {
-      text: "Que el manto de esta noche estrellada te cubra con ternura, renueve tus fuerzas y despierte en ti una infinita gratitud por la vida. Hasta mañana.",
-      author: "— Luz en tus Sueños —"
-    },
-    {
-      text: "No te preocupes por el mañana; cada día trae su propia bendición. Cierra los ojos con la certeza de que todo lo bueno está por llegar. Buenas noches.",
-      author: "— Confianza y Calma —"
-    },
-    {
-      text: "Mira hacia arriba: cada estrella es un recordatorio de que siempre hay luz en la oscuridad. Que descanses profundamente y despiertes con energía renovada.",
-      author: "— El Cielo Te Abraza —"
-    },
-    {
-      text: "Que los ángeles de la tranquilidad custodien tu descanso, que las preocupaciones se disuelvan y que mañana despiertes con una sonrisa radiante.",
-      author: "— Noche de Bendiciones —"
-    }
-  ];
-
-  let currentQuoteIndex = 0;
 
   // --- CONFIGURACIÓN DEL CANVAS Y ESTRELLAS ---
   let stars = [];
@@ -170,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function loop() {
     ctx.clearRect(0, 0, width, height);
 
-    // Dibujar estrellas
+    // Dibujar estrellas fijas y titilantes
     for (let star of stars) {
       star.update();
       star.draw();
@@ -187,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Generar ocasionalmente estrellas fugaces naturales
-    if (Math.random() < 0.008 && shootingStars.length < 3) {
+    if (Math.random() < 0.012 && shootingStars.length < 3) {
       shootingStars.push(new ShootingStar());
     }
 
@@ -197,98 +153,29 @@ document.addEventListener('DOMContentLoaded', () => {
   initStars();
   loop();
 
-  // --- CAMBIO DE FRASES CON TRANSICIÓN SUAVE ---
-  btnNextQuote.addEventListener('click', () => {
-    quoteText.style.opacity = '0';
-    quoteText.style.transform = 'translateY(10px)';
-    authorTag.style.opacity = '0';
+  // --- INTERACTIVIDAD CON LA LUNA ---
+  if (moonWrapper) {
+    moonWrapper.addEventListener('click', () => {
+      moonWrapper.style.transform = 'scale(1.15) rotate(8deg)';
+      setTimeout(() => {
+        moonWrapper.style.transform = '';
+      }, 500);
 
-    setTimeout(() => {
-      currentQuoteIndex = (currentQuoteIndex + 1) % quotes.length;
-      quoteText.textContent = quotes[currentQuoteIndex].text;
-      authorTag.textContent = quotes[currentQuoteIndex].author;
+      const rect = moonWrapper.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
 
-      quoteText.style.opacity = '1';
-      quoteText.style.transform = 'translateY(0)';
-      authorTag.style.opacity = '1';
-    }, 350);
+      for (let i = 0; i < 22; i++) {
+        spawnSparkleAt(centerX, centerY);
+      }
 
-    createSparkles(btnNextQuote);
-  });
-
-  // --- BOTÓN: PEDIR UN DESEO ---
-  btnMakeWish.addEventListener('click', () => {
-    // 1. Lanzar inmediatamente 2 estrellas fugaces radiantes
-    shootingStars.push(new ShootingStar(width * 0.15, height * 0.1, 14, Math.PI / 4));
-    setTimeout(() => {
-      shootingStars.push(new ShootingStar(width * 0.3, height * 0.05, 12, Math.PI / 3.8));
-    }, 280);
-
-    // 2. Chispas alrededor del botón
-    createSparkles(btnMakeWish, 18);
-
-    // 3. Sonido celestial
-    playChimeSound();
-
-    // 4. Mostrar Toast
-    showToast('🌠 ¡Tu deseo ha sido enviado al firmamento! Duerme en paz y con fe.');
-  });
-
-  // --- BOTÓN: COPIAR FRASE ---
-  if (btnCopyQuote) {
-    btnCopyQuote.addEventListener('click', () => {
-      const textToCopy = `"${quotes[currentQuoteIndex].text}"\n${quotes[currentQuoteIndex].author}\n✨ ¡Buenas Noches! 🌙`;
-      navigator.clipboard.writeText(textToCopy).then(() => {
-        createSparkles(btnCopyQuote, 14);
-        playChimeSound(700);
-        showToast('📋 ¡Frase copiada al portapapeles con éxito!');
-      }).catch(() => {
-        showToast('🌙 ¡Frase lista para compartir!');
-      });
+      // Disparar una estrella fugaz al tocar la luna
+      shootingStars.push(new ShootingStar(centerX, centerY, 12, Math.PI / 3.8));
+      playChimeSound(660);
     });
   }
 
-  function showToast(message) {
-    wishToast.textContent = message;
-    wishToast.classList.add('show');
-    clearTimeout(wishToast.timer);
-    wishToast.timer = setTimeout(() => {
-      wishToast.classList.remove('show');
-    }, 4000);
-  }
-
-  // --- INTERACTIVIDAD CON LA LUNA ---
-  moonWrapper.addEventListener('click', () => {
-    // Halo pulse momentáneo
-    moonWrapper.style.transform = 'scale(1.15) rotate(8deg)';
-    setTimeout(() => {
-      moonWrapper.style.transform = '';
-    }, 500);
-
-    // Lanza una lluvia de chispas estelares desde el centro de la luna
-    const rect = moonWrapper.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-
-    for (let i = 0; i < 22; i++) {
-      spawnSparkleAt(centerX, centerY);
-    }
-
-    // Sonido celestial suave
-    playChimeSound(660);
-  });
-
   // --- EFECTO DE CHISPAS EN PANTALLA ---
-  function createSparkles(element, count = 12) {
-    const rect = element.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-
-    for (let i = 0; i < count; i++) {
-      spawnSparkleAt(centerX, centerY);
-    }
-  }
-
   function spawnSparkleAt(x, y) {
     const particle = document.createElement('div');
     particle.className = 'sparkle-particle';
@@ -317,19 +204,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 850);
   }
 
-  // Clic en cualquier parte del cielo para generar una pequeña estrella
+  // Clic en cualquier parte del cielo para generar chispas estelares
   document.addEventListener('pointerdown', (e) => {
-    if (e.target.closest('button') || e.target.closest('.card-container') || e.target.closest('.moon-wrapper')) {
+    if (e.target.closest('.card-container') || e.target.closest('.moon-wrapper')) {
       return;
     }
     spawnSparkleAt(e.clientX, e.clientY);
   });
 
-  // --- AUDIO SINTETIZADO ZEN / CELESTIAL (WEB AUDIO API) ---
+  // --- SONIDO CELESTIAL SUAVE (WEB AUDIO API) ---
   let audioCtx = null;
-  let isAmbientPlaying = false;
-  let ambientNodes = [];
-
   function getAudioContext() {
     if (!audioCtx) {
       const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -341,7 +225,6 @@ document.addEventListener('DOMContentLoaded', () => {
     return audioCtx;
   }
 
-  // Tono de campana de viento celestial
   function playChimeSound(freq = 528) {
     try {
       const ctx = getAudioContext();
@@ -361,82 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
       osc.start();
       osc.stop(ctx.currentTime + 1.8);
     } catch (e) {
-      console.log('Audio en espera de interacción');
+      // Navegadores que bloquean autoplay antes de gesto de usuario
     }
   }
-
-  // Música ambiental de frecuencias relajantes (Solfeggio 432Hz / 528Hz)
-  function toggleAmbientMusic() {
-    const ctx = getAudioContext();
-
-    if (isAmbientPlaying) {
-      stopAmbientMusic();
-      isAmbientPlaying = false;
-      btnSoundToggle.classList.remove('active');
-      soundIcon.textContent = '🔈';
-      soundLabel.textContent = 'Música Zen';
-    } else {
-      startAmbientMusic(ctx);
-      isAmbientPlaying = true;
-      btnSoundToggle.classList.add('active');
-      soundIcon.textContent = '🔊';
-      soundLabel.textContent = 'Pausar Zen';
-    }
-  }
-
-  function startAmbientMusic(ctx) {
-    ambientNodes = [];
-    const freqs = [108, 216, 432, 528]; // Frecuencias serenas y armónicas
-
-    const masterGain = ctx.createGain();
-    masterGain.gain.setValueAtTime(0.01, ctx.currentTime);
-    masterGain.gain.linearRampToValueAtTime(0.08, ctx.currentTime + 3);
-    masterGain.connect(ctx.destination);
-    ambientNodes.push(masterGain);
-
-    freqs.forEach((freq, idx) => {
-      const osc = ctx.createOscillator();
-      const pan = ctx.createStereoPanner ? ctx.createStereoPanner() : null;
-      const gain = ctx.createGain();
-
-      osc.type = idx % 2 === 0 ? 'sine' : 'triangle';
-      osc.frequency.setValueAtTime(freq, ctx.currentTime);
-
-      gain.gain.value = 0.25 / freqs.length;
-
-      // LFO sutil para respiración del sonido
-      const lfo = ctx.createOscillator();
-      const lfoGain = ctx.createGain();
-      lfo.frequency.value = 0.15 + idx * 0.05;
-      lfoGain.gain.value = 1.8;
-      lfo.connect(osc.frequency);
-      lfo.start();
-      ambientNodes.push(lfo);
-
-      if (pan) {
-        pan.pan.value = (idx % 2 === 0 ? 1 : -1) * 0.4;
-        osc.connect(gain);
-        gain.connect(pan);
-        pan.connect(masterGain);
-      } else {
-        osc.connect(gain);
-        gain.connect(masterGain);
-      }
-
-      osc.start();
-      ambientNodes.push(osc);
-    });
-  }
-
-  function stopAmbientMusic() {
-    ambientNodes.forEach(node => {
-      try {
-        if (node.stop) node.stop();
-        if (node.disconnect) node.disconnect();
-      } catch (e) { }
-    });
-    ambientNodes = [];
-  }
-
-  btnSoundToggle.addEventListener('click', toggleAmbientMusic);
 });
